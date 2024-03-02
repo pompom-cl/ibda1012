@@ -14,15 +14,17 @@ def main():
 
   for i in range(len(cities)):
     cities[i] = cities[i].strip()
-  print(cities)
 
   while True:
     city = input("\nEnter city name (x: exit): ").upper()
+    results = query_name(cities, city)
+    print(results)
     if city == 'X':
       break
-    if city in cities:
-      print("Found")
-      print('https://www.google.com/search?q=' + city.lower())
+    elif results:
+      for result in results:
+        print("Found")
+        print('https://www.google.com/search?q=' + result.lower())
     else:
       print("Not found")
 
@@ -40,16 +42,21 @@ def web_scrap(letter):
 
 
 def query_name(cities, text):
-  n = len(text)
-  result = []
-  for word in cities:
-    n = len(text) - 1
-    m = len(word)
-    if text == word or \
-        text[0] == "*" and word[m-n:] == text[1:] or \
-        text[-1] == '*' and word[:n] == text[:n]:
-      result.append([word])
-  nomor = 1
+  if '*' not in text:
+    return [text] if text in cities else []
+  else:
+    results = []
+    n = len(text)
+    if text[-1] == '*':
+      for city in cities:
+        if text[:n - 1] == city[:n - 1]:
+          results.append(city)
+    elif text[0] == '*':
+      for city in cities:
+        if text[1:n] == city[-(n - 1):]:
+          results.append(city)
+    return results
+  
 
 
 def read_file(letter):
