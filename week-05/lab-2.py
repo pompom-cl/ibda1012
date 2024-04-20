@@ -56,7 +56,6 @@ def query_name(cities, text):
         if text[1:n] == city[-(n - 1):]:
           results.append(city)
     return results
-  
 
 
 def read_file(letter):
